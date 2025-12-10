@@ -1,0 +1,5 @@
+{
+  "name": "CEH Contract Management Dashboard",
+  "description": "A comprehensive dashboard for managing contracts, tracking KPIs, revenue, expenses, and customer data for CEH.",
+  "requestFramePermissions": []
+}
