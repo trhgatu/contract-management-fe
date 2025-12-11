@@ -61,7 +61,7 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="flex items-center gap-3 shrink-0 cursor-pointer" onClick={() => onNavigate('dashboard')}>
             <div className="h-10 w-10 flex items-center justify-center overflow-hidden bg-white rounded-md p-0.5">
                  <img
-                    src="https://res.cloudinary.com/dikm4mb2h/image/upload/v1765185786/logo_iwgmoz.png"
+                    src="/assets/logo/ceh_logo.png"
                     alt="CEH Logo"
                     className="h-full w-full object-contain"
                  />

@@ -4,9 +4,9 @@ import React from 'react';
 export const LoginHeader: React.FC = () => {
     return (
         <div className="text-center mb-8">
-            <div className="h-32 w-48 flex items-center justify-center mb-6">
+            <div className="h-32 w-48 flex items-center justify-center mb-6 mx-auto">
                 <img
-                    src="https://res.cloudinary.com/dikm4mb2h/image/upload/v1765185786/logo_iwgmoz.png"
+                    src="/assets/logo/ceh_logo.png"
                     alt="CEH Logo"
                     className="h-full w-full object-contain"
                 />
