@@ -11,6 +11,7 @@ import { LoginScreen } from './features/auth/LoginScreen';
 import { Icons } from './components/ui/Icons';
 import { CategoryType, ReportType, AdminTabType } from './types';
 import { WarningScreen } from './features/warnings/WarningScreen';
+import { ProfileScreen } from './features/profile/ProfileScreen';
 import { authService } from './services';
 import { ToastProvider } from './contexts/ToastContext';
 
@@ -150,8 +151,9 @@ function App() {
             {currentView === 'reports' && (<div className="animate-in fade-in duration-500 h-[calc(100vh-8rem)]"><ReportsScreen activeReport={currentReportTab} /></div>)}
             {currentView === 'admin' && (<div className="animate-in fade-in duration-500 h-[calc(100vh-8rem)]"><AdminScreen activeTab={currentAdminTab} /></div>)}
             {currentView === 'warnings' && (<div className="animate-in fade-in duration-500 h-[calc(100vh-8rem)]"><WarningScreen /></div>)}
+            {currentView === 'profile' && (<div className="animate-in fade-in duration-500 py-6"><ProfileScreen /></div>)}
 
-            {currentView !== 'dashboard' && currentView !== 'contracts' && currentView !== 'shared-categories' && currentView !== 'reports' && currentView !== 'admin' && currentView !== 'warnings' && (
+            {currentView !== 'dashboard' && currentView !== 'contracts' && currentView !== 'shared-categories' && currentView !== 'reports' && currentView !== 'admin' && currentView !== 'warnings' && currentView !== 'profile' && (
               <div className="flex flex-col items-center justify-center h-[60vh] text-slate-400 animate-in zoom-in duration-300">
                 <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
                   <Icons.Settings size={32} className="text-slate-300" />

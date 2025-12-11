@@ -9,7 +9,7 @@ import { LogsTab } from './components/LogsTab';
 import { UserModal } from './components/UserModal';
 import { GroupModal } from './components/GroupModal';
 import { LogDetailsModal } from './components/LogDetailsModal';
-import { adminService } from '../../services';
+import { adminService, authService } from '../../services';
 import { useToast } from '../../contexts/ToastContext';
 
 interface AdminScreenProps {
@@ -127,7 +127,29 @@ export const AdminScreen: React.FC<AdminScreenProps> = ({ activeTab = 'config' }
         try {
             setActionLoading(true);
             if (modalMode === 'add') {
-                showToast('Vui lòng sử dụng chức năng Register để tạo user mới', 'warning');
+                const registerData = {
+                    name: data.name,
+                    email: data.email,
+                    password: data.password,
+                    role: 'user' as const // Default role
+                };
+
+                // 1. Create User
+                const res = await authService.register(registerData);
+                let newUser = res.data as any; // Cast to match SystemUser structure if needed
+
+                // 2. Update Group/Status if needed (since register only sets basics)
+                if (data.groupId || data.status) {
+                    const updateData: any = {};
+                    if (data.groupId) updateData.groupId = data.groupId;
+                    if (data.status) updateData.status = data.status;
+
+                    newUser = await adminService.updateUser(newUser.id, updateData);
+                }
+
+                setUsers(prev => [newUser, ...prev]);
+                showToast('Thêm người dùng mới thành công', 'success');
+                setIsModalOpen(false);
             } else {
                 const updated = await adminService.updateUser(data.id, data);
                 setUsers(prev => prev.map(u => u.id === data.id ? { ...u, ...updated } : u));

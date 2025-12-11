@@ -28,7 +28,7 @@ export const UserAccountsTab: React.FC<UserAccountsTabProps> = ({ users, groups,
                         <tr>
                             <th className="px-4 py-3 w-16 text-center">STT</th>
                             <th className="px-4 py-3">Nhóm tài khoản</th>
-                            <th className="px-4 py-3">Tên đăng nhập</th>
+                            {/* <th className="px-4 py-3">Tên đăng nhập</th> */}
                             <th className="px-4 py-3">Họ tên</th>
                             <th className="px-4 py-3">Email</th>
                             <th className="px-4 py-3 text-center">Trạng thái</th>
@@ -44,8 +44,8 @@ export const UserAccountsTab: React.FC<UserAccountsTabProps> = ({ users, groups,
                                     <td className="px-4 py-3">
                                         <span className="px-2 py-0.5 bg-slate-100 rounded text-xs font-medium border border-slate-200">{groupName}</span>
                                     </td>
-                                    <td className="px-4 py-3 font-medium text-slate-800">{user.username}</td>
-                                    <td className="px-4 py-3 text-slate-600">{user.fullName}</td>
+                                    {/* <td className="px-4 py-3 font-medium text-slate-800">{user.username}</td> */}
+                                    <td className="px-4 py-3 font-medium text-slate-800">{user.name}</td>
                                     <td className="px-4 py-3 text-slate-500">{user.email}</td>
                                     <td className="px-4 py-3 text-center">
                                         {user.status === 'active'

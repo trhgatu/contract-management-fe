@@ -26,9 +26,7 @@ export const UserModal: React.FC<UserModalProps> = ({ isOpen, mode, groups, edit
     const validate = () => {
         const newErrors: any = {};
 
-        if (!item.username || item.username.trim() === '') {
-            newErrors.username = 'Tên đăng nhập không được để trống';
-        }
+
 
         if (!item.email || item.email.trim() === '') {
             newErrors.email = 'Email không được để trống';
@@ -36,8 +34,8 @@ export const UserModal: React.FC<UserModalProps> = ({ isOpen, mode, groups, edit
             newErrors.email = 'Email không hợp lệ';
         }
 
-        if (!item.fullName || item.fullName.trim() === '') {
-            newErrors.fullName = 'Họ và tên không được để trống';
+        if (!item.name || item.name.trim() === '') {
+            newErrors.name = 'Họ và tên không được để trống';
         }
 
         if (mode === 'add' && (!item.password || item.password.trim() === '')) {
@@ -83,16 +81,7 @@ export const UserModal: React.FC<UserModalProps> = ({ isOpen, mode, groups, edit
                                 {groups.map(g => <option key={g.id} value={g.id}>{g.name}</option>)}
                             </select>
                         </div>
-                        <div className="space-y-1">
-                            <label className="text-sm font-bold text-slate-700">Tên đăng nhập <span className="text-red-500">*</span></label>
-                            <input
-                                type="text"
-                                value={item.username || ''}
-                                onChange={e => setItem({ ...item, username: e.target.value })}
-                                className={`w-full px-3 py-2 border rounded-lg focus:border-blue-500 outline-none ${errors.username ? 'border-red-500' : 'border-slate-200'}`}
-                            />
-                            {errors.username && <p className="text-xs text-red-500 mt-1">{errors.username}</p>}
-                        </div>
+
                         <div className="space-y-1">
                             <label className="text-sm font-bold text-slate-700">Mật khẩu {mode === 'add' && <span className="text-red-500">*</span>}</label>
                             <input
@@ -108,11 +97,11 @@ export const UserModal: React.FC<UserModalProps> = ({ isOpen, mode, groups, edit
                             <label className="text-sm font-bold text-slate-700">Họ và tên <span className="text-red-500">*</span></label>
                             <input
                                 type="text"
-                                value={item.fullName || ''}
-                                onChange={e => setItem({ ...item, fullName: e.target.value })}
-                                className={`w-full px-3 py-2 border rounded-lg focus:border-blue-500 outline-none ${errors.fullName ? 'border-red-500' : 'border-slate-200'}`}
+                                value={item.name || ''}
+                                onChange={e => setItem({ ...item, name: e.target.value })}
+                                className={`w-full px-3 py-2 border rounded-lg focus:border-blue-500 outline-none ${errors.name ? 'border-red-500' : 'border-slate-200'}`}
                             />
-                            {errors.fullName && <p className="text-xs text-red-500 mt-1">{errors.fullName}</p>}
+                            {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
                         </div>
                         <div className="space-y-1">
                             <label className="text-sm font-bold text-slate-700">Email <span className="text-red-500">*</span></label>

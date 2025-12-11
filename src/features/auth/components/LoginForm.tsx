@@ -49,7 +49,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
 
             {/* Helper text */}
             <div className="bg-blue-50 text-blue-700 text-xs py-2 px-3 rounded-lg border border-blue-100">
-                <strong>Tài khoản test:</strong> admin@ceh.vn / Admin@123
+                <strong>Tài khoản test:</strong> admin@cehsoft.com / Admin@123
             </div>
 
             <div className="space-y-1.5">

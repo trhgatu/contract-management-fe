@@ -171,14 +171,14 @@ export interface UserGroup {
 
 export interface SystemUser {
   id: string;
-  username: string;
-  fullName: string;
-  role: string; // Display role name
-  groupId: string; // Link to UserGroup
+  name: string;
+  // username: string; // Validated unused by backend
+  role: string;
+  groupId: string;
   email: string;
   status: 'active' | 'inactive';
-  lastLogin: string;
-  password?: string; // Only for update logic
+  password?: string;
+  createdAt?: string;
 }
 
 export interface PermissionNode {
