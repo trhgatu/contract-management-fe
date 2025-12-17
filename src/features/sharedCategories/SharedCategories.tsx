@@ -5,6 +5,7 @@ import { SHARED_CATEGORIES_LIST } from '../../constants';
 import { CategoryType, MasterDataCustomer, MasterDataSupplier } from '../../types';
 import { useToast } from '../../contexts/ToastContext';
 import { Button, Popconfirm, Spin, message, Tooltip, Input, Select, Tag } from 'antd';
+import { getErrorMessage } from '../../utils/errorHelper';
 
 interface SharedCategoriesProps {
     activeCategory: CategoryType;
@@ -21,10 +22,10 @@ const STATUS_COLORS = [
 const CATEGORY_TO_API_TYPE: Record<string, string> = {
     'customer': 'customers',
     'supplier': 'suppliers',
-    'unit': 'units',
     'software': 'software',
     'contract-type': 'contract-types',
-    'status': 'status'
+    'status': 'status',
+    'personnel': 'personnel' // Assuming backend endpoint exists or will be created
 };
 
 export const SharedCategories: React.FC<SharedCategoriesProps> = ({ activeCategory }) => {
@@ -39,9 +40,15 @@ export const SharedCategories: React.FC<SharedCategoriesProps> = ({ activeCatego
     const [formData, setFormData] = useState<any>({});
     const [submitting, setSubmitting] = useState(false);
 
+    // Inline Editing State
+    const [editingId, setEditingId] = useState<string | null>(null);
+    const [isAddingNew, setIsAddingNew] = useState(false);
+
     useEffect(() => {
         fetchData();
         setSearchText('');
+        setEditingId(null);
+        setIsAddingNew(false);
     }, [activeCategory]);
 
     const fetchData = async () => {
@@ -54,7 +61,7 @@ export const SharedCategories: React.FC<SharedCategoriesProps> = ({ activeCatego
             setData(result);
         } catch (error: any) {
             console.error(error);
-            showToast('Lỗi tải dữ liệu: ' + (error.message || 'Unknown'), 'error');
+            showToast(getErrorMessage(error), 'error');
         } finally {
             setLoading(false);
         }
@@ -62,7 +69,50 @@ export const SharedCategories: React.FC<SharedCategoriesProps> = ({ activeCatego
 
     // --- Actions ---
 
+    const handleSaveRow = async () => {
+        if (submitting) return;
+        if (!formData.code || !formData.name) {
+            message.warning('Vui lòng điền đủ Mã và Tên');
+            return;
+        }
+
+        setSubmitting(true);
+        const apiType = CATEGORY_TO_API_TYPE[activeCategory];
+        try {
+            if (isAddingNew) {
+                const { id, ...dataToCreate } = formData;
+                const created = await masterDataService.create(apiType as any, dataToCreate);
+                setData(prev => [created, ...prev]);
+                message.success('Thêm mới thành công!');
+            } else {
+                const updated = await masterDataService.update(apiType as any, formData.id, formData);
+                setData(prev => prev.map(item => item.id === formData.id ? updated : item));
+                message.success('Cập nhật thành công!');
+            }
+            setEditingId(null);
+            setIsAddingNew(false);
+            setFormData({});
+        } catch (error: any) {
+            message.error(getErrorMessage(error));
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    const handleCancelRow = () => {
+        setEditingId(null);
+        setIsAddingNew(false);
+        setFormData({});
+    };
+
     const handleAdd = () => {
+        if (activeCategory === 'personnel') {
+            setIsAddingNew(true);
+            setEditingId(null);
+            setFormData({ status: 'active' });
+            return;
+        }
+
         setModalMode('add');
         const initialData: any = { status: 'active' };
 
@@ -78,6 +128,13 @@ export const SharedCategories: React.FC<SharedCategoriesProps> = ({ activeCatego
     };
 
     const handleEdit = (record: any) => {
+        if (activeCategory === 'personnel') {
+            setEditingId(record.id);
+            setIsAddingNew(false);
+            setFormData({ ...record });
+            return;
+        }
+
         setModalMode('edit');
         setFormData({ ...record });
         setIsModalOpen(true);
@@ -90,7 +147,7 @@ export const SharedCategories: React.FC<SharedCategoriesProps> = ({ activeCatego
             message.success('Đã xóa thành công!');
             setData(prev => prev.filter(item => item.id !== id));
         } catch (error: any) {
-            message.error('Lỗi khi xóa: ' + (error.message || 'Unknown'));
+            message.error(getErrorMessage(error));
         }
     };
 
@@ -115,7 +172,7 @@ export const SharedCategories: React.FC<SharedCategoriesProps> = ({ activeCatego
             }
             setIsModalOpen(false);
         } catch (error: any) {
-            message.error('Lỗi lưu dữ liệu: ' + (error.message || 'Unknown'));
+            message.error(getErrorMessage(error));
         } finally {
             setSubmitting(false);
         }
@@ -155,8 +212,11 @@ export const SharedCategories: React.FC<SharedCategoriesProps> = ({ activeCatego
             <table className="w-full text-sm text-left border-collapse">
                 <thead className="bg-slate-100 text-slate-700 font-bold text-xs uppercase sticky top-0 z-10 shadow-sm">
                     <tr>
+                        {activeCategory === 'personnel' && <th className="px-4 py-3 whitespace-nowrap border-b border-slate-200 w-12 text-center">STT</th>}
                         <th className="px-4 py-3 whitespace-nowrap border-b border-slate-200 w-24">Mã</th>
-                        <th className="px-4 py-3 whitespace-nowrap border-b border-slate-200">Tên danh mục</th>
+                        <th className="px-4 py-3 whitespace-nowrap border-b border-slate-200">
+                            {activeCategory === 'personnel' ? 'Tên nhân sự' : 'Tên danh mục'}
+                        </th>
                         {activeCategory === 'status' && <th className="px-4 py-3 whitespace-nowrap border-b border-slate-200">Màu sắc</th>}
                         {['software', 'status'].includes(activeCategory) && <th className="px-4 py-3 whitespace-nowrap border-b border-slate-200">Mô tả</th>}
                         {(activeCategory === 'customer' || activeCategory === 'supplier') && (
@@ -165,82 +225,152 @@ export const SharedCategories: React.FC<SharedCategoriesProps> = ({ activeCatego
                                 <th className="px-4 py-3 whitespace-nowrap border-b border-slate-200 text-center">Trạng thái</th>
                             </>
                         )}
+                        {activeCategory === 'personnel' && (
+                            <>
+                                <th className="px-4 py-3 whitespace-nowrap border-b border-slate-200">Phòng ban</th>
+                                <th className="px-4 py-3 whitespace-nowrap border-b border-slate-200">Chức vụ/Vai trò</th>
+                            </>
+                        )}
                         <th className="px-4 py-3 whitespace-nowrap border-b border-slate-200 text-center w-24">Tác vụ</th>
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
-                    {filteredData.map((item) => (
-                        <tr key={item.id} className="hover:bg-slate-50 transition-colors">
-                            <td className="px-4 py-3 font-mono font-bold text-slate-600">{item.code}</td>
-                            <td className="px-4 py-3">
-                                <div className="font-medium text-blue-700">{item.name}</div>
-                                {/** Subname display based on type */}
-                                {activeCategory === 'customer' && <div className="text-xs text-slate-400">{item.address}</div>}
-                                {activeCategory === 'supplier' && <div className="text-xs text-slate-400">MST: {item.taxCode}</div>}
-                                {['unit', 'contract-type'].includes(activeCategory) && item.description && (
-                                    <div className="text-xs text-slate-400 truncate max-w-xs">{item.description}</div>
-                                )}
-                            </td>
-
-                            {activeCategory === 'status' && (
-                                <td className="px-4 py-3">
-                                    <span className={`px-2 py-1 rounded text-xs font-semibold ${item.color}`}>Màu hiển thị</span>
-                                </td>
-                            )}
-
-                            {(activeCategory === 'customer' || activeCategory === 'supplier') && (
-                                <td className="px-4 py-3">
-                                    <div className="text-xs text-slate-500">
-                                        {item.contactPerson && <div className="font-medium text-slate-700 mb-0.5">{item.contactPerson}</div>}
-                                        {item.phone && <div className="flex items-center gap-1"><Icons.Phone size={10} /> {item.phone}</div>}
-                                        {item.email && <div className="flex items-center gap-1"><Icons.Attach size={10} /> {item.email}</div>}
-                                    </div>
-                                </td>
-                            )}
-
-                            {(activeCategory === 'customer' || activeCategory === 'supplier') && (
-                                <td className="px-4 py-3 text-center">
-                                    {item.status === 'active'
-                                        ? <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 border border-green-200">Hoạt động</span>
-                                        : <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-500 border border-slate-200">Đã khóa</span>
-                                    }
-                                </td>
-                            )}
-
-                            {['software', 'status'].includes(activeCategory) && <td className="px-4 py-3 text-slate-500">{item.description}</td>}
-
+                    {/* New Row Input (Inline Add) */}
+                    {isAddingNew && activeCategory === 'personnel' && (
+                        <tr className="bg-blue-50/50">
+                            <td className="px-4 py-3 text-center text-slate-500">New</td>
+                            <td className="px-4 py-3"><Input value={formData.code} onChange={e => setFormData({ ...formData, code: e.target.value })} placeholder="Mã nhân sự" size="small" autoFocus /></td>
+                            <td className="px-4 py-3"><Input value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} placeholder="Tên nhân sự" size="small" /></td>
+                            <td className="px-4 py-3"><Input value={formData.group} onChange={e => setFormData({ ...formData, group: e.target.value })} placeholder="Phòng ban" size="small" /></td>
+                            <td className="px-4 py-3"><Input value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} placeholder="Chức vụ" size="small" /></td>
                             <td className="px-4 py-3 text-center">
                                 <div className="flex items-center justify-center gap-2">
-                                    <Tooltip title="Chỉnh sửa">
-                                        <Button
-                                            type="text"
-                                            size="small"
-                                            icon={<Icons.Edit size={16} className="text-blue-600" />}
-                                            onClick={() => handleEdit(item)}
-                                        />
-                                    </Tooltip>
-                                    <Popconfirm
-                                        title="Xóa mục này?"
-                                        description="Hành động này không thể hoàn tác."
-                                        onConfirm={() => handleDelete(item.id)}
-                                        okText="Xóa"
-                                        cancelText="Hủy"
-                                        okButtonProps={{ danger: true }}
-                                    >
-                                        <Tooltip title="Xóa vĩnh viễn">
-                                            <Button
-                                                type="text"
-                                                size="small"
-                                                icon={<Icons.Trash size={16} className="text-rose-500" />}
-                                            />
-                                        </Tooltip>
-                                    </Popconfirm>
+                                    <Button type="text" size="small" icon={<Icons.Check size={16} className="text-emerald-600" />} onClick={handleSaveRow} loading={submitting} />
+                                    <Button type="text" size="small" icon={<Icons.X size={16} className="text-slate-400" />} onClick={handleCancelRow} disabled={submitting} />
                                 </div>
                             </td>
                         </tr>
-                    ))}
+                    )}
+
+                    {filteredData.map((item) => {
+                        const isEditing = editingId === item.id;
+                        return (
+                            <tr key={item.id} className="hover:bg-slate-50 transition-colors">
+                                {activeCategory === 'personnel' && <td className="px-4 py-3 text-center text-slate-500">{(data.indexOf(item) || 0) + 1}</td>}
+
+                                {isEditing && activeCategory === 'personnel' ? (
+                                    <>
+                                        <td className="px-4 py-3"><Input value={formData.code} onChange={e => setFormData({ ...formData, code: e.target.value })} size="small" /></td>
+                                        <td className="px-4 py-3"><Input value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} size="small" /></td>
+                                        <td className="px-4 py-3"><Input value={formData.group} onChange={e => setFormData({ ...formData, group: e.target.value })} size="small" /></td>
+                                        <td className="px-4 py-3"><Input value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} size="small" /></td>
+                                    </>
+                                ) : (
+                                    <>
+                                        <td className="px-4 py-3 font-mono font-bold text-slate-600">{item.code}</td>
+                                        <td className="px-4 py-3">
+                                            <div className="font-medium text-blue-700">{item.name}</div>
+                                            {/* Subname display based on type */}
+                                            {activeCategory === 'customer' && <div className="text-xs text-slate-400">{item.address}</div>}
+                                            {activeCategory === 'supplier' && <div className="text-xs text-slate-400">MST: {item.taxCode}</div>}
+                                            {activeCategory === 'contract-type' && item.description && (
+                                                <div className="text-xs text-slate-400 truncate max-w-xs">{item.description}</div>
+                                            )}
+                                        </td>
+
+                                        {activeCategory === 'status' && (
+                                            <td className="px-4 py-3">
+                                                <span className={`px-2 py-1 rounded text-xs font-semibold ${item.color}`}>Màu hiển thị</span>
+                                            </td>
+                                        )}
+
+                                        {(activeCategory === 'customer' || activeCategory === 'supplier') && (
+                                            <td className="px-4 py-3">
+                                                <div className="text-xs text-slate-500">
+                                                    {item.contactPerson && <div className="font-medium text-slate-700 mb-0.5">{item.contactPerson}</div>}
+                                                    {item.phone && <div className="flex items-center gap-1"><Icons.Phone size={10} /> {item.phone}</div>}
+                                                    {item.email && <div className="flex items-center gap-1"><Icons.Attach size={10} /> {item.email}</div>}
+                                                </div>
+                                            </td>
+                                        )}
+
+                                        {(activeCategory === 'customer' || activeCategory === 'supplier') && (
+                                            <td className="px-4 py-3 text-center">
+                                                {item.status === 'active'
+                                                    ? <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 border border-green-200">Hoạt động</span>
+                                                    : <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-500 border border-slate-200">Đã khóa</span>
+                                                }
+                                            </td>
+                                        )}
+
+                                        {['software', 'status'].includes(activeCategory) && <td className="px-4 py-3 text-slate-500">{item.description}</td>}
+
+                                        {activeCategory === 'personnel' && (
+                                            <>
+                                                <td className="px-4 py-3 text-slate-600">{item.group}</td>
+                                                <td className="px-4 py-3 text-slate-600">{item.description}</td>
+                                            </>
+                                        )}
+                                    </>
+                                )}
+
+                                <td className="px-4 py-3 text-center">
+                                    <div className="flex items-center justify-center gap-2">
+                                        {isEditing ? (
+                                            <>
+                                                <Tooltip title="Lưu">
+                                                    <Button
+                                                        type="text"
+                                                        size="small"
+                                                        icon={<Icons.Check size={16} className="text-emerald-600" />}
+                                                        onClick={handleSaveRow}
+                                                        loading={submitting}
+                                                    />
+                                                </Tooltip>
+                                                <Tooltip title="Hủy">
+                                                    <Button
+                                                        type="text"
+                                                        size="small"
+                                                        icon={<Icons.X size={16} className="text-slate-400" />}
+                                                        onClick={handleCancelRow}
+                                                    />
+                                                </Tooltip>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Tooltip title="Chỉnh sửa">
+                                                    <Button
+                                                        type="text"
+                                                        size="small"
+                                                        icon={<Icons.Edit size={16} className="text-blue-600" />}
+                                                        onClick={() => handleEdit(item)}
+                                                    />
+                                                </Tooltip>
+                                                <Popconfirm
+                                                    title="Xóa mục này?"
+                                                    description="Hành động này không thể hoàn tác."
+                                                    onConfirm={() => handleDelete(item.id)}
+                                                    okText="Xóa"
+                                                    cancelText="Hủy"
+                                                    okButtonProps={{ danger: true }}
+                                                >
+                                                    <Tooltip title="Xóa vĩnh viễn">
+                                                        <Button
+                                                            type="text"
+                                                            size="small"
+                                                            icon={<Icons.Trash size={16} className="text-rose-500" />}
+                                                        />
+                                                    </Tooltip>
+                                                </Popconfirm>
+                                            </>
+                                        )}
+                                    </div>
+                                </td>
+                            </tr>
+                        );
+                    })}
                 </tbody>
-            </table>
+            </table >
         );
     };
 
@@ -359,17 +489,21 @@ export const SharedCategories: React.FC<SharedCategoriesProps> = ({ activeCatego
                     // Generic Form
                     <div className="space-y-4">
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Mã danh mục <span className="text-red-500">*</span></label>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">Mã {activeCategory === 'personnel' ? 'nhân sự' : 'danh mục'} <span className="text-red-500">*</span></label>
                             <Input value={formData.code} onChange={e => setFormData({ ...formData, code: e.target.value })} placeholder="Nhập mã..." />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Tên danh mục <span className="text-red-500">*</span></label>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">Tên {activeCategory === 'personnel' ? 'nhân sự' : 'danh mục'} <span className="text-red-500">*</span></label>
                             <Input value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} placeholder="Nhập tên..." />
                         </div>
-                        <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Mô tả</label>
-                            <Input.TextArea rows={3} value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} />
-                        </div>
+
+                        {activeCategory !== 'personnel' && (
+                            <div>
+                                <label className="block text-sm font-medium text-slate-700 mb-1">Mô tả</label>
+                                <Input.TextArea rows={3} value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} />
+                            </div>
+                        )}
+
                         {activeCategory === 'status' && (
                             <div>
                                 <label className="block text-sm font-medium text-slate-700 mb-1">Màu hiển thị</label>
@@ -384,6 +518,27 @@ export const SharedCategories: React.FC<SharedCategoriesProps> = ({ activeCatego
                                     ))}
                                 </Select>
                             </div>
+                        )}
+
+                        {activeCategory === 'personnel' && (
+                            <>
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 mb-1">Phòng ban</label>
+                                    <Input value={formData.group} onChange={e => setFormData({ ...formData, group: e.target.value })} placeholder="VD: Khối Phát triển PM..." />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 mb-1">Chức vụ/Vai trò</label>
+                                    <Input value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} placeholder="VD: PM, Dev, Tester..." />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 mb-1">Email (Optional)</label>
+                                    <Input value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 mb-1">Số điện thoại (Optional)</label>
+                                    <Input value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} />
+                                </div>
+                            </>
                         )}
                     </div>
                 )}

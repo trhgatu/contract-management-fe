@@ -105,26 +105,26 @@ export const MOCK_CONTRACTS: Contract[] = [
       { id: '3', batch: 'Đợt 3', content: 'Nghiệm thu tổng thể', ratio: 30, value: 165000000, isCollected: false, collectionDate: '', invoiceStatus: 'not_exported' },
     ],
     expenses: [
-      { 
-        id: '1', 
+      {
+        id: '1',
         category: 'Thuê Server',
         description: 'Server 32GB RAM, 8 Core',
         supplierId: '1', // NCC001 - Viễn Thông A
-        totalAmount: 50000000, 
+        totalAmount: 50000000,
         contractStatus: 'ST02', // Consistent status code
         paymentStatus: 'paid',
         pic: 'Nguyễn Văn A',
         note: 'Thanh toán theo quý',
         attachments: [
-           { id: 'f1', name: 'HD_Thue_Server.pdf', size: '1.2 MB', type: 'pdf', uploadDate: '2025-01-10' }
+          { id: 'f1', name: 'HD_Thue_Server.pdf', size: '1.2 MB', type: 'pdf', uploadDate: '2025-01-10' }
         ]
       },
-      { 
-        id: '2', 
-        category: 'Chi phí đi lại', 
+      {
+        id: '2',
+        category: 'Chi phí đi lại',
         description: 'Vé máy bay khứ hồi HCM-HP',
         supplierId: '2', // NCC002 - FPT (Example)
-        totalAmount: 10000000, 
+        totalAmount: 10000000,
         contractStatus: 'ST03', // Was ST03
         paymentStatus: 'unpaid',
         pic: 'Trần Thị B',
@@ -137,8 +137,8 @@ export const MOCK_CONTRACTS: Contract[] = [
       { id: '2', memberCode: 'NV005', name: 'Lê Văn C', role: 'Dev' },
     ],
     attachments: [
-        { id: '1', name: 'Hop_dong_goc_001.pdf', size: '2.4 MB', type: 'pdf', uploadDate: '2025-01-15' },
-        { id: '2', name: 'Phu_luc_01.docx', size: '500 KB', type: 'docx', uploadDate: '2025-01-20' }
+      { id: '1', name: 'Hop_dong_goc_001.pdf', size: '2.4 MB', type: 'pdf', uploadDate: '2025-01-15' },
+      { id: '2', name: 'Phu_luc_01.docx', size: '500 KB', type: 'docx', uploadDate: '2025-01-20' }
     ]
   },
   {
@@ -165,7 +165,7 @@ export const MOCK_CONTRACTS: Contract[] = [
     ],
     attachments: []
   },
-   {
+  {
     id: '3',
     code: 'HD-2025-003',
     signDate: '2025-02-20',
@@ -191,27 +191,25 @@ export const MOCK_CONTRACTS: Contract[] = [
 export const SHARED_CATEGORIES_LIST: CategoryDefinition[] = [
   { id: 'customer', name: 'Quản lý Khách hàng', icon: 'Customer', description: 'Quản lý thông tin đối tác, khách hàng' },
   { id: 'supplier', name: 'Quản lý Nhà cung cấp', icon: 'Supplier', description: 'Quản lý thông tin nhà cung cấp, đối tác' },
-  { id: 'unit', name: 'Đơn vị thực hiện', icon: 'Building', description: 'Danh sách công ty con, phòng ban' },
   { id: 'software', name: 'Loại hình phần mềm', icon: 'Category', description: 'VTOS, ICD, M&R, VSL...' },
   { id: 'contract-type', name: 'Loại hợp đồng', icon: 'Contract', description: 'Triển khai mới, bảo trì, gia hạn' },
   { id: 'status', name: 'Trạng thái hợp đồng', icon: 'Check', description: 'Các trạng thái vòng đời dự án' },
-  { id: 'expense', name: 'Danh mục chi phí', icon: 'Dollar', description: 'Các loại chi phí dự án' },
-  { id: 'job', name: 'Danh mục công việc', icon: 'List', description: 'Công việc tiêu chuẩn' },
+  { id: 'personnel', name: 'Danh sách nhân sự', icon: 'Users', description: 'Quản lý nhân viên, PM, AM' },
 ];
 
 // UPDATED CUSTOMER LIST with new fields
 export const MOCK_MD_CUSTOMERS: MasterDataCustomer[] = [
-    { id: '1', code: 'KH001', name: 'Công ty Cổ phần Cảng Sài Gòn', field: 'Cảng biển', contactPerson: 'Ông Nguyễn Văn A', phone: '0901234567', email: 'a.nguyen@csg.com', address: 'TP.HCM', taxCode: '0301111111', group: 'VIP', status: 'active' },
-    { id: '2', code: 'KH002', name: 'Công ty TNHH MTV DV Hàng hải Hậu Giang', field: 'Hàng hải', contactPerson: 'Bà Lê Thị B', phone: '0902222222', email: 'b.le@hgl.com', address: 'Hậu Giang', taxCode: '0302222222', group: 'Thân thiết', status: 'active' },
-    { id: '3', code: 'KH003', name: 'Công ty CP Giải pháp CNTT Tân Cảng', field: 'CNTT', contactPerson: 'Ông Trần Văn C', phone: '0903333333', email: 'c.tran@tcl.com', address: 'TP.Thủ Đức', taxCode: '0303333333', group: 'Nội bộ', status: 'active' },
-    { id: '4', code: 'KH004', name: 'Công ty TNHH Cảng Quốc tế Tân Cảng - Cái Mép', field: 'Cảng biển', contactPerson: 'Bà Phạm Thị D', phone: '0904444444', email: 'd.pham@tcit.com', address: 'Bà Rịa - Vũng Tàu', taxCode: '0304444444', group: 'VIP', status: 'active' },
-    { id: '5', code: 'KH005', name: 'Công ty CP Vận tải và Thương mại Quốc tế', field: 'Vận tải', contactPerson: 'Ông Hoàng Văn E', phone: '0905555555', email: 'e.hoang@itc.com', address: 'TP.HCM', taxCode: '0305555555', group: 'Mới', status: 'inactive' },
-    // Simplified remaining entries for brevity, assuming standard active status
-    { id: '6', code: 'KH006', name: 'Công ty TNHH Xuất nhập khẩu Sang Trọng', field: 'XNK', contactPerson: 'Bà Ngô Thị F', phone: '0906666666', email: 'f.ngo@sangtrong.com', address: 'Bình Dương', taxCode: '0306666666', group: 'Thường', status: 'active' },
-    { id: '7', code: 'KH007', name: 'Công ty Cổ phần Dịch vụ Hàng hải Tân Cảng', field: 'Hàng hải', contactPerson: 'Ông Đỗ Văn G', phone: '0907777777', email: 'g.do@tcco.com', address: 'TP.Thủ Đức', taxCode: '0307777777', group: 'Nội bộ', status: 'active' },
-    { id: '8', code: 'KH008', name: 'Công ty Cổ phần Cảng Nam Hải', field: 'Cảng biển', contactPerson: 'Bà Vũ Thị H', phone: '0908888888', email: 'h.vu@namhai.com', address: 'Hải Phòng', taxCode: '0308888888', group: 'VIP', status: 'active' },
-    { id: '9', code: 'KH009', name: 'Công ty TNHH MTV Tổng Công ty Tân Cảng Sài Gòn', field: 'Cảng biển', contactPerson: 'Ông Lý Văn I', phone: '0909999999', email: 'i.ly@snp.com', address: 'TP.HCM', taxCode: '0309999999', group: 'VIP', status: 'active' },
-    { id: '10', code: 'KH010', name: 'Công ty TNHH Cảng Phước Long', field: 'Cảng biển', contactPerson: 'Bà Bùi Thị K', phone: '0910000000', email: 'k.bui@phuoclong.com', address: 'TP.Thủ Đức', taxCode: '0310000000', group: 'Thân thiết', status: 'active' },
+  { id: '1', code: 'KH001', name: 'Công ty Cổ phần Cảng Sài Gòn', field: 'Cảng biển', contactPerson: 'Ông Nguyễn Văn A', phone: '0901234567', email: 'a.nguyen@csg.com', address: 'TP.HCM', taxCode: '0301111111', group: 'VIP', status: 'active' },
+  { id: '2', code: 'KH002', name: 'Công ty TNHH MTV DV Hàng hải Hậu Giang', field: 'Hàng hải', contactPerson: 'Bà Lê Thị B', phone: '0902222222', email: 'b.le@hgl.com', address: 'Hậu Giang', taxCode: '0302222222', group: 'Thân thiết', status: 'active' },
+  { id: '3', code: 'KH003', name: 'Công ty CP Giải pháp CNTT Tân Cảng', field: 'CNTT', contactPerson: 'Ông Trần Văn C', phone: '0903333333', email: 'c.tran@tcl.com', address: 'TP.Thủ Đức', taxCode: '0303333333', group: 'Nội bộ', status: 'active' },
+  { id: '4', code: 'KH004', name: 'Công ty TNHH Cảng Quốc tế Tân Cảng - Cái Mép', field: 'Cảng biển', contactPerson: 'Bà Phạm Thị D', phone: '0904444444', email: 'd.pham@tcit.com', address: 'Bà Rịa - Vũng Tàu', taxCode: '0304444444', group: 'VIP', status: 'active' },
+  { id: '5', code: 'KH005', name: 'Công ty CP Vận tải và Thương mại Quốc tế', field: 'Vận tải', contactPerson: 'Ông Hoàng Văn E', phone: '0905555555', email: 'e.hoang@itc.com', address: 'TP.HCM', taxCode: '0305555555', group: 'Mới', status: 'inactive' },
+  // Simplified remaining entries for brevity, assuming standard active status
+  { id: '6', code: 'KH006', name: 'Công ty TNHH Xuất nhập khẩu Sang Trọng', field: 'XNK', contactPerson: 'Bà Ngô Thị F', phone: '0906666666', email: 'f.ngo@sangtrong.com', address: 'Bình Dương', taxCode: '0306666666', group: 'Thường', status: 'active' },
+  { id: '7', code: 'KH007', name: 'Công ty Cổ phần Dịch vụ Hàng hải Tân Cảng', field: 'Hàng hải', contactPerson: 'Ông Đỗ Văn G', phone: '0907777777', email: 'g.do@tcco.com', address: 'TP.Thủ Đức', taxCode: '0307777777', group: 'Nội bộ', status: 'active' },
+  { id: '8', code: 'KH008', name: 'Công ty Cổ phần Cảng Nam Hải', field: 'Cảng biển', contactPerson: 'Bà Vũ Thị H', phone: '0908888888', email: 'h.vu@namhai.com', address: 'Hải Phòng', taxCode: '0308888888', group: 'VIP', status: 'active' },
+  { id: '9', code: 'KH009', name: 'Công ty TNHH MTV Tổng Công ty Tân Cảng Sài Gòn', field: 'Cảng biển', contactPerson: 'Ông Lý Văn I', phone: '0909999999', email: 'i.ly@snp.com', address: 'TP.HCM', taxCode: '0309999999', group: 'VIP', status: 'active' },
+  { id: '10', code: 'KH010', name: 'Công ty TNHH Cảng Phước Long', field: 'Cảng biển', contactPerson: 'Bà Bùi Thị K', phone: '0910000000', email: 'k.bui@phuoclong.com', address: 'TP.Thủ Đức', taxCode: '0310000000', group: 'Thân thiết', status: 'active' },
 ];
 
 // UPDATED SUPPLIER LIST with new fields
@@ -258,88 +256,88 @@ export const MOCK_MD_STATUS: MasterDataGeneric[] = [
 // --- Mock Data for Admin & Reports ---
 
 export const MOCK_USER_GROUPS: UserGroup[] = [
-    { id: '1', code: 'G01', name: 'Super Admin', note: 'Quản trị hệ thống toàn quyền' },
-    { id: '2', code: 'G02', name: 'Ban Giám Đốc', note: 'Xem báo cáo, duyệt hợp đồng' },
-    { id: '3', code: 'G03', name: 'Kế Toán Trưởng', note: 'Quản lý công nợ, hóa đơn' },
-    { id: '4', code: 'G04', name: 'Project Manager', note: 'Quản lý dự án, chi phí' },
-    { id: '5', code: 'G05', name: 'Sales', note: 'Tạo hợp đồng, quản lý khách hàng' },
+  { id: '1', code: 'G01', name: 'Super Admin', note: 'Quản trị hệ thống toàn quyền' },
+  { id: '2', code: 'G02', name: 'Ban Giám Đốc', note: 'Xem báo cáo, duyệt hợp đồng' },
+  { id: '3', code: 'G03', name: 'Kế Toán Trưởng', note: 'Quản lý công nợ, hóa đơn' },
+  { id: '4', code: 'G04', name: 'Project Manager', note: 'Quản lý dự án, chi phí' },
+  { id: '5', code: 'G05', name: 'Sales', note: 'Tạo hợp đồng, quản lý khách hàng' },
 ];
 
 export const MOCK_USERS: SystemUser[] = [
-    { id: '1', username: 'admin', fullName: 'Nguyễn Quản Trị', role: 'Super Admin', groupId: '1', email: 'admin@ceh.vn', status: 'active', lastLogin: '2025-02-28 08:30:00' },
-    { id: '2', username: 'kttruong', fullName: 'Trần Kế Toán', role: 'Kế toán trưởng', groupId: '3', email: 'ketoan@ceh.vn', status: 'active', lastLogin: '2025-02-27 14:15:00' },
-    { id: '3', username: 'giamdoc', fullName: 'Lê Giám Đốc', role: 'Ban Giám Đốc', groupId: '2', email: 'ceo@ceh.vn', status: 'active', lastLogin: '2025-02-28 09:00:00' },
-    { id: '4', username: 'pm_nam', fullName: 'Phạm Nam', role: 'Project Manager', groupId: '4', email: 'nam.pham@ceh.vn', status: 'inactive', lastLogin: '2025-01-10 10:00:00' },
+  { id: '1', username: 'admin', fullName: 'Nguyễn Quản Trị', role: 'Super Admin', groupId: '1', email: 'admin@ceh.vn', status: 'active', lastLogin: '2025-02-28 08:30:00' },
+  { id: '2', username: 'kttruong', fullName: 'Trần Kế Toán', role: 'Kế toán trưởng', groupId: '3', email: 'ketoan@ceh.vn', status: 'active', lastLogin: '2025-02-27 14:15:00' },
+  { id: '3', username: 'giamdoc', fullName: 'Lê Giám Đốc', role: 'Ban Giám Đốc', groupId: '2', email: 'ceo@ceh.vn', status: 'active', lastLogin: '2025-02-28 09:00:00' },
+  { id: '4', username: 'pm_nam', fullName: 'Phạm Nam', role: 'Project Manager', groupId: '4', email: 'nam.pham@ceh.vn', status: 'inactive', lastLogin: '2025-01-10 10:00:00' },
 ];
 
 export const MOCK_AUDIT_LOGS: AuditLog[] = [
-    { 
-        id: '1', 
-        user: 'admin', 
-        action: 'SỬA', 
-        screen: 'Cấu hình hệ thống', 
-        details: { field: 'email_config', old: 'smtp.gmail.com', new: 'mail.ceh.vn' }, 
-        timestamp: '28/02/2025 08:35:12' 
-    },
-    { 
-        id: '2', 
-        user: 'kttruong', 
-        action: 'THÊM', 
-        screen: 'Quản lý hợp đồng > Chi phí', 
-        details: { contract: 'HD-2025-001', amount: 50000000, supplier: 'Viễn Thông A' }, 
-        timestamp: '27/02/2025 15:20:00' 
-    },
-    { 
-        id: '3', 
-        user: 'admin', 
-        action: 'THÊM', 
-        screen: 'Quản lý người dùng > Tài khoản', 
-        details: { username: 'nhanvien_moi', role: 'Nhân viên', email: 'nv@ceh.vn' }, 
-        timestamp: '28/02/2025 09:00:01' 
-    },
-    { 
-        id: '4', 
-        user: 'pm_nam', 
-        action: 'SỬA', 
-        screen: 'Quản lý hợp đồng', 
-        details: { contract: 'HD-2025-001', field: 'status', old: 'ST01', new: 'ST02' }, 
-        timestamp: '10/01/2025 10:05:00' 
-    },
-    { 
-        id: '5', 
-        user: 'admin', 
-        action: 'XÓA', 
-        screen: 'Danh mục dùng chung > Khách hàng', 
-        details: { id: 'KH099', name: 'Công ty ABC' }, 
-        timestamp: '01/03/2025 14:30:22' 
-    },
+  {
+    id: '1',
+    user: 'admin',
+    action: 'SỬA',
+    screen: 'Cấu hình hệ thống',
+    details: { field: 'email_config', old: 'smtp.gmail.com', new: 'mail.ceh.vn' },
+    timestamp: '28/02/2025 08:35:12'
+  },
+  {
+    id: '2',
+    user: 'kttruong',
+    action: 'THÊM',
+    screen: 'Quản lý hợp đồng > Chi phí',
+    details: { contract: 'HD-2025-001', amount: 50000000, supplier: 'Viễn Thông A' },
+    timestamp: '27/02/2025 15:20:00'
+  },
+  {
+    id: '3',
+    user: 'admin',
+    action: 'THÊM',
+    screen: 'Quản lý người dùng > Tài khoản',
+    details: { username: 'nhanvien_moi', role: 'Nhân viên', email: 'nv@ceh.vn' },
+    timestamp: '28/02/2025 09:00:01'
+  },
+  {
+    id: '4',
+    user: 'pm_nam',
+    action: 'SỬA',
+    screen: 'Quản lý hợp đồng',
+    details: { contract: 'HD-2025-001', field: 'status', old: 'ST01', new: 'ST02' },
+    timestamp: '10/01/2025 10:05:00'
+  },
+  {
+    id: '5',
+    user: 'admin',
+    action: 'XÓA',
+    screen: 'Danh mục dùng chung > Khách hàng',
+    details: { id: 'KH099', name: 'Công ty ABC' },
+    timestamp: '01/03/2025 14:30:22'
+  },
 ];
 
 export const MOCK_PERMISSIONS: PermissionNode[] = [
-    { id: 'p1', name: 'Dashboard', isParent: true, canView: true, canAdd: false, canEdit: false, canDelete: false },
-    { id: 'p2', name: 'Quản lý hợp đồng', isParent: true, canView: true, canAdd: true, canEdit: true, canDelete: true },
-    { id: 'p3', name: 'Danh mục dùng chung', isParent: true, canView: true, canAdd: false, canEdit: false, canDelete: false },
-    { id: 'p3_1', name: 'Quản lý khách hàng', isParent: false, parentId: 'p3', canView: true, canAdd: true, canEdit: true, canDelete: false },
-    { id: 'p3_2', name: 'Quản lý nhà cung cấp', isParent: false, parentId: 'p3', canView: true, canAdd: true, canEdit: true, canDelete: false },
-    { id: 'p3_3', name: 'Cấu hình tham số', isParent: false, parentId: 'p3', canView: true, canAdd: false, canEdit: false, canDelete: false },
-    { id: 'p4', name: 'Báo cáo thống kê', isParent: true, canView: true, canAdd: false, canEdit: false, canDelete: false },
-    { id: 'p5', name: 'Quản trị hệ thống', isParent: true, canView: true, canAdd: true, canEdit: true, canDelete: true },
+  { id: 'p1', name: 'Dashboard', isParent: true, canView: true, canAdd: false, canEdit: false, canDelete: false },
+  { id: 'p2', name: 'Quản lý hợp đồng', isParent: true, canView: true, canAdd: true, canEdit: true, canDelete: true },
+  { id: 'p3', name: 'Danh mục dùng chung', isParent: true, canView: true, canAdd: false, canEdit: false, canDelete: false },
+  { id: 'p3_1', name: 'Quản lý khách hàng', isParent: false, parentId: 'p3', canView: true, canAdd: true, canEdit: true, canDelete: false },
+  { id: 'p3_2', name: 'Quản lý nhà cung cấp', isParent: false, parentId: 'p3', canView: true, canAdd: true, canEdit: true, canDelete: false },
+  { id: 'p3_3', name: 'Cấu hình tham số', isParent: false, parentId: 'p3', canView: true, canAdd: false, canEdit: false, canDelete: false },
+  { id: 'p4', name: 'Báo cáo thống kê', isParent: true, canView: true, canAdd: false, canEdit: false, canDelete: false },
+  { id: 'p5', name: 'Quản trị hệ thống', isParent: true, canView: true, canAdd: true, canEdit: true, canDelete: true },
 ];
 
 export const REPORT_PROFIT_DATA: ProfitData[] = [
-    { month: 'T1', revenue: 1200, expense: 800, profit: 400 },
-    { month: 'T2', revenue: 1500, expense: 900, profit: 600 },
-    { month: 'T3', revenue: 1800, expense: 950, profit: 850 },
-    { month: 'T4', revenue: 2100, expense: 1100, profit: 1000 },
-    { month: 'T5', revenue: 2500, expense: 1300, profit: 1200 },
-    { month: 'T6', revenue: 3000, expense: 1500, profit: 1500 },
+  { month: 'T1', revenue: 1200, expense: 800, profit: 400 },
+  { month: 'T2', revenue: 1500, expense: 900, profit: 600 },
+  { month: 'T3', revenue: 1800, expense: 950, profit: 850 },
+  { month: 'T4', revenue: 2100, expense: 1100, profit: 1000 },
+  { month: 'T5', revenue: 2500, expense: 1300, profit: 1200 },
+  { month: 'T6', revenue: 3000, expense: 1500, profit: 1500 },
 ];
 
 // UPDATED REPORT SOFTWARE DATA
 export const REPORT_SOFTWARE_DATA: RevenueBySoftware[] = [
-    { name: 'VTOS', value: 35 },
-    { name: 'Smartport', value: 28 },
-    { name: 'VSL', value: 20 },
-    { name: 'M&R', value: 10 },
-    { name: 'Eport', value: 7 },
+  { name: 'VTOS', value: 35 },
+  { name: 'Smartport', value: 28 },
+  { name: 'VSL', value: 20 },
+  { name: 'M&R', value: 10 },
+  { name: 'Eport', value: 7 },
 ];

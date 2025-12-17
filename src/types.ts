@@ -147,7 +147,7 @@ export interface MasterDataGeneric {
 
 // --- Navigation / Category Types ---
 
-export type CategoryType = 'customer' | 'supplier' | 'unit' | 'software' | 'contract-type' | 'status' | 'expense' | 'job';
+export type CategoryType = 'customer' | 'supplier' | 'software' | 'contract-type' | 'status' | 'personnel';
 
 export type ReportType = 'contract' | 'revenue' | 'expense' | 'profit' | 'customer' | 'software' | 'payment' | 'invoice' | 'warnings';
 
